@@ -353,3 +353,21 @@ Tue Nov 25 23:35:40 2025
 +-----------------------------------------------------------------------------------------+
 dev-EC2-->
 ```
+
+#### Result : 
+Your gpu-test pod successfully ran nvidia-smi inside Kubernetes.
+
+It detected the Tesla T4 GPU, driver version 580.105.08, CUDA 13.0.
+
+GPU memory is visible (15360MiB), utilization is 0% because no workload is running yet.
+
+No processes are bound → exactly what we expect from a test pod that only probes GPU visibility.
+
+This proves end‑to‑end GPU scheduling is working:
+
+Node advertises nvidia.com/gpu.
+
+Pod requested GPU and was scheduled.
+
+NVIDIA driver + CUDA runtime are functional inside the container.
+
