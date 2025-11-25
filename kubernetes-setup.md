@@ -76,8 +76,20 @@ MissingIAMPermissions: failed to call ec2:DescribeNetworkInterfaces
 Until that policy is attached, aws-node cannot manage ENIs → CNI fails → node never becomes Ready.
 Fix the policies !!!! 
 
+##### Your node was failing because:
+❌ Missing AmazonEKS_CNI_Policy on the node role
 
+→ aws-node crashed
+→ CNI cannot attach ENIs
+→ kubelet stays NotReady
 
+✔ Attach policy → restart pods → node becomes Ready
+```
+Dev-EC2-->kubectl get pods -n kube-system | grep aws-node
+aws-node-pfgph             2/2     Running   0          23s
+```
+### nodeadm : Initializes a node in an EKS cluster.
+https://awslabs.github.io/amazon-eks-ami/nodeadm/
 
 
 
