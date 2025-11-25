@@ -146,6 +146,21 @@ Copy code
 Ready
 ```
 
+#### Verify : 
+🛠 Quick Checks
+Run these to confirm system components:
+```
+bash
+kubectl get pods -n kube-system
+You should see:
 
+aws-node-* (VPC CNI) → Running
+
+coredns-* → Running
+
+kube-proxy-* → Running
+
+nvidia-device-plugin-* → Running (for GPU scheduling)
+```
 
 
