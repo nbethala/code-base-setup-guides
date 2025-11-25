@@ -4,6 +4,7 @@
 
 #### nvidia-smi
  nvidia-smi
+ ```
 Tue Nov 25 22:56:35 2025
 +-----------------------------------------------------------------------------------------+
 | NVIDIA-SMI 580.105.08             Driver Version: 580.105.08     CUDA Version: 13.0     |
@@ -29,6 +30,7 @@ Driver Version: 580.105.08
 CUDA Version: 13.0
 GPU: Tesla T4
 
+```
 ✅ FIX: Install the correct GPU device plugin for Kubernetes v1.34
 
 Your cluster is running:
@@ -204,7 +206,7 @@ Expected output:
 
 
 
-
+```
 ev-EC2-->kubectl exec -it gpu-test -- bash
 root@gpu-test:/# nvidia-smi
 Tue Nov 25 23:36:43 2025       
@@ -228,9 +230,126 @@ Tue Nov 25 23:36:43 2025
 |  No running processes found                                                             |
 +-----------------------------------------------------------------------------------------+
 root@gpu-test:/# 
-
+```
 If you see the GPU → drivers & device plugin are working.
 You can now safely deploy Triton.
 
+#### dev-EC2-->kubectl describe node ip-10-0-1-230.ec2.internal 
+Name:               ip-10-0-1-230.ec2.internal
+Roles:              <none>
+Labels:             accelerator=nvidia
+                    beta.kubernetes.io/arch=amd64
+                    beta.kubernetes.io/instance-type=g4dn.xlarge
+                    beta.kubernetes.io/os=linux
+                    eks.amazonaws.com/capacityType=ON_DEMAND
+                    eks.amazonaws.com/nodegroup=gpu-e2e-cluster-gpu-on-demand
+                    eks.amazonaws.com/nodegroup-image=ami-0c4ca6471e3246940
+                    failure-domain.beta.kubernetes.io/region=us-east-1
+                    failure-domain.beta.kubernetes.io/zone=us-east-1a
+                    k8s.io/cloud-provider-aws=36ba6312c5cced003c295089f34e99e3
+                    kubernetes.io/arch=amd64
+                    kubernetes.io/hostname=ip-10-0-1-230.ec2.internal
+                    kubernetes.io/os=linux
+                    node.kubernetes.io/instance-type=g4dn.xlarge
+                    topology.k8s.aws/zone-id=use1-az6
+                    topology.kubernetes.io/region=us-east-1
+                    topology.kubernetes.io/zone=us-east-1a
+Annotations:        alpha.kubernetes.io/provided-node-ip: 10.0.1.230
+                    node.alpha.kubernetes.io/ttl: 0
+                    volumes.kubernetes.io/controller-managed-attach-detach: true
+CreationTimestamp:  Tue, 25 Nov 2025 22:01:45 +0000
+Taints:             <none>
+Unschedulable:      false
+Lease:
+  HolderIdentity:  ip-10-0-1-230.ec2.internal
+  AcquireTime:     <unset>
+  RenewTime:       Tue, 25 Nov 2025 23:49:15 +0000
+Conditions:
+  Type             Status  LastHeartbeatTime                 LastTransitionTime                Reason                       Message
+  ----             ------  -----------------                 ------------------                ------                       -------
+  MemoryPressure   False   Tue, 25 Nov 2025 23:47:30 +0000   Tue, 25 Nov 2025 22:01:42 +0000   KubeletHasSufficientMemory   kubelet has sufficient memory available
+  DiskPressure     False   Tue, 25 Nov 2025 23:47:30 +0000   Tue, 25 Nov 2025 22:01:42 +0000   KubeletHasNoDiskPressure     kubelet has no disk pressure
+  PIDPressure      False   Tue, 25 Nov 2025 23:47:30 +0000   Tue, 25 Nov 2025 22:01:42 +0000   KubeletHasSufficientPID      kubelet has sufficient PID available
+  Ready            True    Tue, 25 Nov 2025 23:47:30 +0000   Tue, 25 Nov 2025 22:01:57 +0000   KubeletReady                 kubelet is posting ready status
+Addresses:
+  InternalIP:   10.0.1.230
+  ExternalIP:   3.80.253.84
+  InternalDNS:  ip-10-0-1-230.ec2.internal
+  Hostname:     ip-10-0-1-230.ec2.internal
+  ExternalDNS:  ec2-3-80-253-84.compute-1.amazonaws.com
+Capacity:
+  cpu:                4
+  ephemeral-storage:  20893676Ki
+  hugepages-1Gi:      0
+  hugepages-2Mi:      0
+  memory:             16164852Ki
+  nvidia.com/gpu:     1
+  pods:               29
+Allocatable:
+  cpu:                3920m
+  ephemeral-storage:  18181869946
+  hugepages-1Gi:      0
+  hugepages-2Mi:      0
+  memory:             15474676Ki
+  nvidia.com/gpu:     1
+  pods:               29
+System Info:
+  Machine ID:                 ec2e2043a2a52e027c45e668f184ae5d
+  System UUID:                ec2e2043-a2a5-2e02-7c45-e668f184ae5d
+  Boot ID:                    0f7660d2-92ac-42bc-b665-38bf20c6225f
+  Kernel Version:             6.12.55-74.119.amzn2023.x86_64
+  OS Image:                   Amazon Linux 2023.9.20251117
+  Operating System:           linux
+  Architecture:               amd64
+  Container Runtime Version:  containerd://2.1.4
+  Kubelet Version:            v1.34.2-eks-ecaa3a6
+  Kube-Proxy Version:         
+ProviderID:                   aws:///us-east-1a/i-001ef381ad7bde56f
+Non-terminated Pods:          (6 in total)
+  Namespace                   Name                                    CPU Requests  CPU Limits  Memory Requests  Memory Limits  Age
+  ---------                   ----                                    ------------  ----------  ---------------  -------------  ---
+  default                     gpu-test                                0 (0%)        0 (0%)      0 (0%)           0 (0%)         13m
+  kube-system                 aws-node-kbj29                          50m (1%)      0 (0%)      0 (0%)           0 (0%)         107m
+  kube-system                 coredns-7d58d485c9-5c4m4                100m (2%)     0 (0%)      70Mi (0%)        170Mi (1%)     120m
+  kube-system                 coredns-7d58d485c9-f5v9n                100m (2%)     0 (0%)      70Mi (0%)        170Mi (1%)     115m
+  kube-system                 kube-proxy-vxtjq                        100m (2%)     0 (0%)      0 (0%)           0 (0%)         107m
+  kube-system                 nvidia-device-plugin-daemonset-kdcg6    0 (0%)        0 (0%)      0 (0%)           0 (0%)         47m
+Allocated resources:
+  (Total limits may be over 100 percent, i.e., overcommitted.)
+  Resource           Requests    Limits
+  --------           --------    ------
+  cpu                350m (8%)   0 (0%)
+  memory             140Mi (0%)  340Mi (2%)
+  ephemeral-storage  0 (0%)      0 (0%)
+  hugepages-1Gi      0 (0%)      0 (0%)
+  hugepages-2Mi      0 (0%)      0 (0%)
+  nvidia.com/gpu     1           1
+Events:              <none>
+dev-EC2-->
 
+#### verification : 
+```
+dev-EC2-->kubectl logs gpu-test
+Running nvidia-smi...
+Tue Nov 25 23:35:40 2025       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.105.08             Driver Version: 580.105.08     CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  Tesla T4                       On  |   00000000:00:1E.0 Off |                    0 |
+| N/A   22C    P8              9W /   70W |       0MiB /  15360MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
 
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+dev-EC2-->
+```
