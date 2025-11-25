@@ -91,7 +91,60 @@ aws-node-pfgph             2/2     Running   0          23s
 ### nodeadm : Initializes a node in an EKS cluster.
 https://awslabs.github.io/amazon-eks-ami/nodeadm/
 
+```
+aws ec2 describe-instances \
+  --filters "Name=private-ip-address,Values=10.0.1.76" \
+  --query 'Reservations[].Instances[0].[InstanceId,IamInstanceProfile.Arn]' \
+  --output text \
+  --profile nancy-devops
+You will get something like:
 
+ruby
+Copy code
+i-xxxxxxxxxxxx arn:aws:iam::ACCOUNT:instance-profile/<NodeInstanceProfile>
+Then get the role inside that profile:
+
+bash
+Copy code
+aws iam get-instance-profile \
+  --instance-profile-name <NodeInstanceProfile> \
+  --query 'InstanceProfile.Roles[0].RoleName' \
+  --profile nancy-devops
+This gives you the real NodeRoleName.
+
+STEP 2 — Attach the REQUIRED missing policy
+bash
+Copy code
+aws iam attach-role-policy \
+  --role-name <NodeRoleName> \
+  --policy-arn arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy \
+  --profile nancy-devops
+This is the critical missing permission.
+
+STEP 3 — Restart aws-node pods
+bash
+Copy code
+kubectl delete pod -n kube-system -l k8s-app=aws-node
+This forces the pod to restart and re-read IAM permissions.
+
+STEP 4 — Recheck node
+Wait 30–60 seconds:
+
+bash
+Copy code
+kubectl get nodes
+kubectl get pods -n kube-system | grep aws-node
+Node should flip from:
+
+nginx
+Copy code
+NotReady
+to
+
+nginx
+Copy code
+Ready
+```
 
 
 
