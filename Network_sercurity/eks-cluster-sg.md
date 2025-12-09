@@ -31,3 +31,27 @@ By default, this group is output by AWS EKS as:
 cluster_resources.cluster_security_group_id
 
 But you need to check your module structure.
+
+After adding SG, nodeadm + SSM + kubelet will work
+
+Here is why:
+
+Without SG:
+
+Node CANNOT call EKS API (443)
+
+Node CANNOT register with SSM service (HTTPS/Egress)
+
+Node CANNOT reach ECR (HTTPS/Egress)
+
+Node cannot reach cluster endpoint to join
+=> Node stays uninitialized → you cannot SSH or SSM → nodeadm never executes
+
+When using the cluster SG:
+✔ Outbound 0.0.0.0/0 allowed
+✔ Inbound from cluster SG allowed
+✔ Node ↔ Control plane port 443 allowed
+✔ Node ↔ Kubelet port 10250 allowed
+✔ SSM HTTPS allowed
+✔ ECR allowed
+✔ Node joins cluster
