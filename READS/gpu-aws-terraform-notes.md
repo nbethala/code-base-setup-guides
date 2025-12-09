@@ -5,6 +5,8 @@
 
 Visualize an EKS deployment as three concentric/stacked zones:
 
+```
+
 [ User / CI/CD / External ]  --> interacts with
 [ Control Plane (AWS-managed) ]  --> exposes Endpoint + CA + Auth
 [ Node Plane (your EC2 GPU/CPU nodes) ]  --> runs pods (Triton, exporters)
@@ -274,4 +276,6 @@ Run Stage 3 cleanup commands if you still have AWS leftovers.
 
 Apply VPC → IAM → EKS in order and run the verification checks.
 
-Stop & reflect after each stage; write 2–3 sentences about what you learne
+Stop & reflect after each stage; write 2–3 sentences about what you learner
+
+```
